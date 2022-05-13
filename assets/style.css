@@ -1,0 +1,51 @@
+/* 卢加洲 2022/05/12 大概确定了一下布局 */
+body {
+    margin: 0;
+}
+a {
+    text-decoration: none;
+}
+
+div { border: 1px red solid; }
+article { border: 1px blue solid; }
+
+header {
+    height: 50px;
+}
+
+.banner {
+    height: 200px;
+}
+
+.mainbody {
+    position: relative;
+    margin: 20px auto;
+    width: 80%;
+}
+
+.info {
+    float: left;
+    height: 300px;
+    width: 20%;
+}
+
+.content {
+    float: right;
+    width: 70%;
+}
+
+article {
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+.title {
+    height: 30px;
+    line-height: 30px;
+    font-size: large;
+    background-color: aquamarine;
+}
+
+.text {
+    height: 70px;
+}
