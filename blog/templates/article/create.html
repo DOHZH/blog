@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% load staticfiles %}
+{% block title %} Write an Article {% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <br>
+            <form method="post" action=".">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+                <div class="form-group">
+                    <label for="body">Body</label>
+                    <textarea type="text" class="form-control" id="body" name="body" rows="12"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Done</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
