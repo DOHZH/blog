@@ -34,8 +34,8 @@ def article_create(request):
             return HttpResponse("Form error, please refill.")
     else:
         article_post_form = ArticlePostForm()
-        context = {'article_post_form': article_post_form}
-        return render(request, 'article/create.html', context)
+        context = {'action': 'create', 'article_post_form': article_post_form}
+        return render(request, 'article/edit.html', context)
     
 def article_delete(request, id):
     if request.method == 'POST':
@@ -58,5 +58,5 @@ def article_edit(request, id):
             return HttpResponse("Form error, please refill.")
     else:
         article_post_form = ArticlePostForm()
-        context = {'article': article, 'article_post_form': article_post_form}
+        context = {'action': 'edit', 'article': article, 'article_post_form': article_post_form}
         return render(request, 'article/edit.html', context)

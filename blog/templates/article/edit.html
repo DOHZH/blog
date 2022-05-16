@@ -1,5 +1,13 @@
 {% extends "base.html" %} {% load staticfiles %}
-{% block title %} Edit Your Article {% endblock title %}
+
+{% block title %}
+{% if action == 'edit' %}
+Edit Your Article
+{% else %}
+Write an Article
+{% endif %}
+{% endblock title %}
+
 {% block content %}
 <div class="container">
     <div class="row">
