@@ -1,26 +1,43 @@
-<!-- extends表明此页面继承自 base.html 文件 -->
 {% extends "base.html" %}
 {% load staticfiles %}
 
-<!-- 写入 base.html 中定义的 title -->
 {% block title %}
-文章详情
+Article Details
 {% endblock title %}
 
-<!-- 写入 base.html 中定义的 content -->
 {% block content %}
 
-<!-- 文章详情 -->
 <div class="container">
     <div class="row">
-        <!-- 标题及作者 -->
         <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
-        <div class="col-12 alert alert-success">作者：{{ article.author }}</div>
-        <!-- 文章正文 -->
+        <div class="col-12 alert alert-success">Author: {{ article.author }}
+            · <a href="#" onclick="confirm_delete()">Delete</a>
+            <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
+                method="POST">
+                {% csrf_token %}
+                <button type="submit">Send</button>
+            </form>
+            · <a href="{% url 'article:article_edit' article.id %}">Edit</a>
+        </div>
         <div class="col-12">
             <p>{{ article.body|safe }}</p>
         </div>
     </div>
 </div>
+
+<script src="{% static 'layer/layui.js' %}"></script>
+
+<script>
+    function confirm_delete() {
+        layer.open({
+            title: "Confirm",
+            content: "Are you sure to delete this article?",
+            yes: function (index, layero) {
+                $('form#delete button').click();
+                layer.close(index);
+            }
+        })
+    }
+</script>
 
 {% endblock content %}
