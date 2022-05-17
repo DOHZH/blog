@@ -11,6 +11,7 @@ Article Details
     <div class="row">
         <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
         <div class="col-12 alert alert-success">Author: {{ article.author }}
+            · {{ article.created }}
             · <a href="#" onclick="confirm_delete()">Delete</a>
             <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
                 method="POST">
