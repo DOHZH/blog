@@ -15,8 +15,8 @@
 - header.html & footer.html 是头尾的相关内容，由于其需要用于多个场合，因此为了方便代码复用，将其专门提出。
 - article/list.html 可以作为主页，显示文章列表等。
 - article/detail.html 是文章详情页面。
-- article/create.html & edit.html 是新建&编辑文章的页面，两个页面可以相似处理。
-这些页面我们已经按照www.dusaiphoto.com的Django教程写了个初步的框架，用的是bootstrap等样式，前端的同学可以按需修改。有什么问题随时联系。
+- article/edit.html 是新建&编辑文章的页面.
+这些页面我们已经按照www.dusaiphoto.com的Django教程写了个初步的框架（原文中将新建文章和编辑文章的页面分开，我们为了方便已将其合并），用的是bootstrap等样式，前端的同学可以按需修改。有任何问题随时联系。
 
 ### 关于本地测试
 - 在blog目录下执行
