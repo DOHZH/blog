@@ -2,7 +2,9 @@
 ## 来自后端的一些说明
 ### 关于文件
 - blog/ 是主工作目录，所有工作均在此目录下。
-- env/ 运行环境相关文件。在运行blog的相关内容时，首先执行命令
+- env/ 运行环境相关文件。在运行blog的相关内容时，
+- 首先打开env/Scripts/activate.bat,将其中VIRTUAL_ENV属性更改为本机env文件夹所在绝对路径
+- 在安装django2.2版本后执行命令
   ```shell
   env/Scripts/activate.bat
   ```
