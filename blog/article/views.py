@@ -7,6 +7,12 @@ import markdown
 
 def article_list(request):
     articles = ArticlePost.objects.all()
+    for article in articles:
+        article.body = markdown.markdown(article.body,
+            extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite'
+            ])
     context = {'articles': articles}
     return render(request, 'article/list.html', context)
 
