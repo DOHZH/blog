@@ -7,7 +7,7 @@
 - `blog/` 是主工作目录，所有工作均在此目录下。
 - `env/` 运行环境相关文件。在运行blog的相关内容时，
 - 首先打开 `env/Scripts/activate.bat`,将其中 `VIRTUAL_ENV` 属性更改为本机 `env` 文件夹所在绝对路径
-- 在安装django2.2版本后执行命令
+- 在安装 django 2.2 版本后执行命令
   ```shell
   env/Scripts/activate.bat
   ```
@@ -21,7 +21,7 @@
 - `article/list.html` 可以作为主页，显示文章列表等。
 - `article/detail.html` 是文章详情页面。
 - `article/edit.html` 是新建&编辑文章的页面.
-这些页面我们已经按照 [www.dusaiphoto.com 的 Django 教程](https://github.com/stacklens/django_blog_tutorial)写了个初步的框架（原文中将新建文章和编辑文章的页面分开，我们为了方便已将其合并），用的是 bootstrap 等样式，前端的同学可以按需修改。有任何问题随时联系。
+这些页面我们已经按照 [django_blog_tutorial](https://github.com/stacklens/django_blog_tutorial) 写了个初步的框架（原文中将新建文章和编辑文章的页面分开，我们为了方便已将其合并），用的是 bootstrap 等样式，前端的同学可以按需修改。有任何问题随时联系。
 
 ### 关于本地测试
 - 在 blog 目录下执行
@@ -32,4 +32,4 @@
 - 在浏览器中访问 **http://127.0.0.1:8000/article/article-list/**
   即可进入文章列表页面，即我们暂定的主页。
 - 在浏览器中访问 **http://127.0.0.1:8000/admin/**
-  即可进入后台，通过超级用户登录后可以管理后台数据。超级用户的用户名为**root**，密码为**123456**。
+  即可进入后台，通过超级用户登录后可以管理后台数据。超级用户的用户名为 **root** ，密码为 **123456**。
