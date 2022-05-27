@@ -1,6 +1,6 @@
 # Blog
 
-博客框架参考自 https://github.com/stacklens/django_blog_tutorial
+博客框架参考自 https://github.com/stacklens/django_blog_tutorial。
 
 ## 来自后端的一些说明
 ### 关于文件
@@ -9,7 +9,7 @@
 - 新建 github 项目时创建的 `assets/` 和 `home.html` 均仍保留原样。
 
 #### Windows 系统准备
-- 在运行blog的相关内容时，首先打开 `env/Scripts/activate.bat`，将其中 `VIRTUAL_ENV` 属性更改为本机 `env` 文件夹所在绝对路径
+- 在运行blog的相关内容时，首先打开 `env/Scripts/activate.bat`，将其中 `VIRTUAL_ENV` 属性更改为本机 `env` 文件夹所在绝对路径。
 - 在安装 django 后点击执行
   ```
   env/Scripts/activate.bat
