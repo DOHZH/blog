@@ -7,6 +7,17 @@ Homepage
 
 {% block content %}
 
+<style>
+    .card-body {
+        position: relative;
+    }
+    .show {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+    }
+</style>
+
 <div class="container">
     <div class="row mt-2">
 
@@ -26,14 +37,17 @@ Homepage
         {% endfor %}
 
     </div>
+    <div class="preview"></div>
 </div>
 
 <script type="text/javascript">
-    let maxlen = 50;
+    let maxlen = 100;
+    let record = [];
     (function(){
         for(doc of document.getElementsByClassName("card-body")) {
             let text = doc.innerHTML
-            let _text = ""
+            record.push(text)
+            let _text = "<div>"
             let flag = false
             for(let i = 0; i < text.length; ++i) {
                 if(text[i] == '<') flag = true 
@@ -51,9 +65,14 @@ Homepage
                 _text = _text.slice(0, maxlen)
                 _text += "..."
             }
+            _text += "</div>"
+            _text += "<div class=\"show\"> <a href=\"\" onclick=\"show_more(" + String(record.length - 1) + ")\">查看详情</a> </div>"
             doc.innerHTML = _text
         }
     })(window)
+
+    function show_more(ind) {
+    }
 </script>
 
 {% endblock content %}
