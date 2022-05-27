@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load staticfiles %}
 
 {% block title %}
 Homepage
@@ -16,7 +16,7 @@ Homepage
                 <h4 class="card-header">{{ article.title }}</h4>
                 <h7 class="card-header" align="right">{{ article.created }}</h7>
                 <div class="card-body">
-                    <p class="card-text">{{ article.body|safe|slice:'30' }}...</p>
+                    <p class="card-text">{{ article.body|safe }}</p>
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'article:article_detail' article.id %}" class="btn btn-primary">Read me</a>
@@ -27,4 +27,34 @@ Homepage
 
     </div>
 </div>
+
+<script type="text/javascript">
+    let maxlen = 50;
+    (function(){
+        for(doc of document.getElementsByClassName("card-body")) {
+            let text = doc.innerHTML
+            let _text = ""
+            let flag = false
+            for(let i = 0; i < text.length; ++i) {
+                if(text[i] == '<') flag = true 
+                if(flag) {
+                    if(text[i] == '>') flag = false 
+                    continue
+                }
+                if(text[i] == ' ' || text[i] == '\n') {
+                    if(_text == "" || _text[_text.length - 1] == ' ') continue;
+                    _text += " ";
+                }
+                else _text += text[i];
+            }
+            if(_text.length > maxlen) {
+                _text = _text.slice(0, maxlen)
+                _text += "..."
+            }
+            doc.innerHTML = _text
+        }
+    })(window)
+</script>
+
 {% endblock content %}
+
