@@ -7,7 +7,7 @@
 - `blog/` 是主工作目录，所有工作均在此目录下。
 - `env/` 运行环境相关文件。在运行blog的相关内容时，
 - 首先打开 `env/Scripts/activate.bat`,将其中 `VIRTUAL_ENV` 属性更改为本机 `env` 文件夹所在绝对路径
-- 在安装 django 2.2 版本后执行命令
+- 在安装 django 后执行命令
   ```shell
   env/Scripts/activate.bat
   ```
