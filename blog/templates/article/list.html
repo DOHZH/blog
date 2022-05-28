@@ -30,142 +30,16 @@ Homepage
         height: 80%;
         width: 60%;
         z-index: 100;
-        overflow: scroll;
         background-color: white;
+        overflow: scroll;
     }
     .preview-header {
+        position: fixed;
         display: flex;
-        flex-direction: row-reverse;
-    }
-    .preview-text {
-        margin: 20px;
-    }
-
-    #mist {
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        background-color: gray;
-        opacity: 0.5;
-        z-index: 10;
-    }
-</style>
-
-<div class="container">
-    <div class="row mt-2">
-
-        {% for article in articles %}
-        <div class="col-4 mb-4">
-            <div class="card h-100">
-                <h4 class="card-header">{{ article.title }}</h4>
-                <h7 class="card-header" align="right">{{ article.created }}</h7>
-                <div class="card-body">
-                    <p class="card-text">{{ article.body|safe }}</p>
-                </div>
-                <div class="card-footer">
-                    <a href="{% url 'article:article_detail' article.id %}" class="btn btn-primary">Read me</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div id="mist"></div>
-    <div class="preview">
-        <div class="preview-header">
-            <button type="button" onclick="close_preview()">
-                &times;
-            </button>
-        </div>
-        <div class="preview-text"></div>
-    </div>
-</div>
-
-<script type="text/javascript">
-    let maxlen = 100;
-    let record = [];
-    (function(){
-        for(doc of document.getElementsByClassName("card-body")) {
-            let text = doc.innerHTML
-            record.push(text)
-            let _text = "<div>"
-            let flag = false
-            for(let i = 0; i < text.length; ++i) {
-                if(text[i] == '<') flag = true 
-                if(flag) {
-                    if(text[i] == '>') flag = false 
-                    continue
-                }
-                if(text[i] == ' ' || text[i] == '\n') {
-                    if(_text == "" || _text[_text.length - 1] == ' ') continue;
-                    _text += " ";
-                }
-                else _text += text[i];
-            }
-            if(_text.length > maxlen) {
-                _text = _text.slice(0, maxlen)
-                _text += "..."
-            }
-            _text += "</div>"
-            _text += "<div class=\"show\" onclick=\"show_more(" + String(record.length - 1) + ")\">查看详情 </div>"
-            doc.innerHTML = _text
-        }
-    })(window)
-
-    function show_more(ind) {
-        console.log($("#mist"));
-        console.log("show_more " + String(ind));
-        $("#mist").show();
-        $(".preview").fadeIn(500);
-        $(".preview-text").html(record[ind]);
-    }
-    function close_preview() {        
-        $(".preview").fadeOut(500, ()=>{$("#mist").hide();});
-    }
-</script>
-
-{% endblock content %}
-
-{% extends "base.html" %}
-{% load staticfiles %}
-
-{% block title %}
-Homepage
-{% endblock title %}
-
-{% block content %}
-
-<style>
-    button {
-        border: none;
-    }
-    .card-body {
-        position: relative;
-    }
-    .show {
-        position: absolute;
-        cursor: pointer;
-        right: 5px;
-        bottom: 5px;
-        color: #516E41;
-    }
-
-    .preview {
-        display: none;
-        position: absolute;
-        top: 10%;
-        left: 20%;
-        height: 80%;
+        height: 20pt;
         width: 60%;
-        z-index: 100;
-        overflow: scroll;
-        background-color: white;
-    }
-    .preview-header {
-        display: flex;
+        padding-right: 12pt;
+        margin-bottom: 5pt;
         flex-direction: row-reverse;
     }
     .preview-text {
