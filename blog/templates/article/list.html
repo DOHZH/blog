@@ -11,20 +11,18 @@ Homepage
 <div id = banner>
     <div id="text"></div>        
 </div>
-<div class="container">
-    <div class="row mt-2">
-
+<div class="articles">
         {% for article in articles %}
-        <div class="col-4 mb-4">
-            <div class="card h-100">
-                <h4 class="card-header">{{ article.title }}</h4>
-                <h7 class="card-header" align="right">{{ article.created }}</h7>
-                <div class="card-body">
-                    <p class="card-text">{{ article.body|safe }}</p>
-                </div>
-                <div class="card-footer">
-                    <a href="{% url 'article:article_detail' article.id %}" class="btn btn-primary">Read me</a>
-                </div>
+        <div class="my-card" onclick="show_more(this)">
+            <div class="my-card-header">
+                <a href="{% url 'article:article_detail' article.id %}">{{ article.title }}</a>
+            </div>
+            <div class="my-card-detail">{{ article.created }}</div>
+            <div class="my-card-body">
+                {{ article.body|safe }}
+            </div>
+            <div class="my-card-footer">
+                <a href="{% url 'article:article_detail' article.id %}"> more details </a>
             </div>
         </div>
         {% endfor %}
@@ -43,13 +41,13 @@ Homepage
 
 
 <script type="text/javascript">
-    let maxlen = 100;
+    let maxlen = 500;
     let record = [];
     (function(){
-        for(doc of document.getElementsByClassName("card-body")) {
+        for(doc of document.getElementsByClassName("my-card-body")) {
             let text = doc.innerHTML
             record.push(text)
-            let _text = "<div>"
+            let _text = "<div class=\"my-card-text\">"
             let flag = false
             for(let i = 0; i < text.length; ++i) {
                 if(text[i] == '<') flag = true 
@@ -68,14 +66,13 @@ Homepage
                 _text += "..."
             }
             _text += "</div>"
-            _text += "<div class=\"show\" onclick=\"show_more(" + String(record.length - 1) + ")\">查看详情 </div>"
             doc.innerHTML = _text
         }
     })(window)
 
-    function show_more(ind) {
-        console.log($("#mist"));
-        console.log("show_more " + String(ind));
+    function show_more(obj) {
+        ind = $(".my-card").index(obj);
+        console.log(ind);
         $("#mist").show();
         $(".preview").fadeIn(500);
         $(".preview-text").html(record[ind]);

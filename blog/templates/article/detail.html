@@ -20,7 +20,7 @@ Article Details
             </form>
             · <a href="{% url 'article:article_edit' article.id %}">Edit</a>
         </div>
-        <div class="col-12">
+        <div class="col-12 detail-article">
             <p>{{ article.body|safe }}</p>
         </div>
     </div>

@@ -1,0 +1,89 @@
+.articles {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+    position: relative;
+    width: 72%;
+    margin: 10px auto;
+}
+
+.my-card {
+    position: relative;
+    border: 1px solid gainsboro;
+    cursor: pointer;
+    height: 250px;
+    border-radius: 5px;
+    width: 30%;
+    flex-shrink: 0;
+    margin-top: 30px;
+    transition: all 1s;
+    border-bottom: #255359 5px solid;
+}
+
+.my-card-header {
+    height: 40px;
+    width: 100%;
+    line-height: 40px;
+    font-size: 30px;
+    border-bottom: 1px solid gainsboro;
+    padding-left: 5px;
+    overflow: hidden;
+    color: #5E3D50;
+}
+
+.my-card-detail {
+    height: 20px;
+    width: 100%;
+    line-height: 20px;
+    font-size: 15px;
+    border-bottom: 1px solid gainsboro;
+    padding-right: 3pt;
+    text-align: right;
+    color: #D7C4BB;
+}
+
+.my-card-body {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.my-card-text {
+    margin: 7px;
+    overflow: hidden;
+    height: 150px;
+}
+
+.my-card-footer {
+    position: absolute;
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+    flex-direction: row-reverse;
+    padding: 0 6px 6px 0;
+    bottom: 0;
+    color: #516E41;
+}
+
+.my-card:hover {
+    transform: scale(1.02);
+    border-bottom: #78C2C4 5px solid;
+}
+
+@media screen and (max-width: 1200px) {
+    .articles {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .my-card {
+        width: 45%;
+        height: 200px;
+    }
+    .my-card-text {
+        height: 100px;
+    }
+}
