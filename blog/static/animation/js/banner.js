@@ -275,14 +275,14 @@ class Background{
 class Text{
     constructor(text){
         this._html = document.createElement("div");
-        this._parent = document.getElementById("banner");
+        this._parent = document.getElementById("text");
         this._html.textContent = text;
         this._html.className = "banner_text";
     }
     add_css(css_name){
         this._html.classList.add(css_name);
     }
-    add_to_canvas(){
+    add_to_html(){
         this._parent.appendChild(this._html);
     }
     see(){
@@ -312,8 +312,8 @@ let welcome = new Text("Welcome");
 welcome.add_css("welcome");
 let my_text = new Text("My Blog!");
 my_text.add_css("blog_text");
-welcome.add_to_canvas();
-my_text.add_to_canvas();
+welcome.add_to_html();
+my_text.add_to_html();
 
 
 let width = window.innerWidth; 
