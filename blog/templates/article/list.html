@@ -7,65 +7,10 @@ Homepage
 
 {% block content %}
 
-<style>
-    @font-face{
-        font-family: banner_text;
-        src: url(./font/YouraScript-qZ51x-2.otf);
-    }
-    button {
-        border: none;
-    }
-    .card-body {
-        position: relative;
-    }
-    .show {
-        position: absolute;
-        cursor: pointer;
-        right: 5px;
-        bottom: 5px;
-        color: #516E41;
-    }
 
-    .preview {
-        display: none;
-        position: absolute;
-        top: 10%;
-        left: 20%;
-        height: 80%;
-        width: 60%;
-        z-index: 100;
-        background-color: white;
-        overflow: scroll;
-    }
-    .preview-header {
-        position: fixed;
-        display: flex;
-        height: 20pt;
-        width: 60%;
-        padding-right: 12pt;
-        margin-bottom: 5pt;
-        flex-direction: row-reverse;
-    }
-    .preview-text {
-        margin: 20px;
-    }
-
-    #mist {
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        background-color: gray;
-        opacity: 0.5;
-        z-index: 10;
-    }
-</style>
-
+<div id = banner>        
+</div>
 <div class="container">
-    <div id = banner>        
-    </div>
     <div class="row mt-2">
 
         {% for article in articles %}
@@ -136,6 +81,396 @@ Homepage
     }
     function close_preview() {        
         $(".preview").fadeOut(500, ()=>{$("#mist").hide();});
+    }
+</script>
+<script id = "vs_land" type ="x-shader/x-vertex">
+    varying vec3 vTransformedNormal;
+    varying vec4 vmvPosition;
+    varying vec3 vPosition;
+    varying vec2 vUv;
+    void main() {
+        vPosition = position;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        vTransformedNormal = normalMatrix * normal;
+        vmvPosition = mvPosition;
+        vUv = uv;
+        gl_Position = projectionMatrix * mvPosition;
+    }
+</script>
+<script id="fs_land" type="x-shader/x-fragment">
+    varying vec3 vTransformedNormal;
+    varying vec4 vmvPosition;
+    varying vec3 vPosition;
+    varying vec2 vUv;
+
+    uniform vec3 light;
+    uniform vec3 ambient1;
+    uniform vec3 ambient2;
+    uniform sampler2D map;
+    uniform float shadowMix;
+    uniform float fadeOut;
+    float range(float oldValue, float oldMin, float oldMax, float newMin, float newMax) {
+        float oldRange = oldMax - oldMin;
+        float newRange = newMax - newMin;
+        return (((oldValue - oldMin) * newRange) / oldRange) + newMin;
+    }
+    vec3 transformPosition(vec3 pos, mat4 viewMat, vec3 mvPos) {
+        vec4 worldPosition = viewMat * vec4(pos, 1.0);
+        return worldPosition.xyz - mvPos;
+    }
+    
+    vec3 transformPosition(vec3 pos, mat4 viewMat, vec4 mvPos) {
+        vec4 worldPosition = viewMat * vec4(pos, 1.0);
+        return worldPosition.xyz - mvPos.xyz;
+    }
+    void main() {
+        vec3 lVector = transformPosition(light, viewMatrix, vmvPosition);
+        float volume = dot(normalize(vTransformedNormal), normalize(lVector));
+    
+        volume = range(volume, 0.0, 1.0, 0.0, 1.0);
+    
+    //    vec3 lightColor = mix(ambient1, ambient2, volume - 0.2);
+    //    vec3 mixColor = lightColor * volume;
+        vec3 color = mix(ambient1, ambient2, volume);
+    
+        // FadeOut for myPlanes detail view with earth half visible
+        float alpha = mix(1.0, smoothstep(-27.0, -17.0, vmvPosition.y), fadeOut);
+        gl_FragColor = vec4(color, alpha);
+    }
+
+</script>
+<script id="vs_sea" type="x-shader/x-vertex">
+    varying vec2 vUv;
+    varying vec3 vRim;
+    varying vec3 vColor;
+    varying float vAlpha;
+
+    uniform float time;
+    uniform vec3 rimColor;
+    uniform float fadeOut;
+    uniform vec3 ambient1;
+    uniform vec3 ambient2;
+    uniform vec3 light;
+
+    attribute float angle;
+    attribute float radius;
+    attribute float speed;
+
+    vec3 inverseTransformDirection(in vec3 normal, in mat4 matrix) {
+        return normalize((matrix * vec4(normal, 0.0) * matrix).xyz);
+    }
+    
+    vec3 reflection(vec4 worldPosition) {
+        vec3 transformedNormal = normalMatrix * normal;
+        vec3 cameraToVertex = normalize(worldPosition.xyz - cameraPosition);
+        vec3 worldNormal = inverseTransformDirection(transformedNormal, viewMatrix);
+        
+        return reflect(cameraToVertex, worldNormal);
+    }
+
+    vec3 refraction(vec4 worldPosition, float refractionRatio) {
+        vec3 transformedNormal = normalMatrix * normal;
+        vec3 cameraToVertex = normalize(worldPosition.xyz - cameraPosition);
+        vec3 worldNormal = inverseTransformDirection(transformedNormal, viewMatrix);
+        
+        return refract(cameraToVertex, worldNormal, refractionRatio);
+    }
+    float range(float oldValue, float oldMin, float oldMax, float newMin, float newMax) {
+        float oldRange = oldMax - oldMin;
+        float newRange = newMax - newMin;
+        return (((oldValue - oldMin) * newRange) / oldRange) + newMin;
+    }
+    // Description : Array and textureless GLSL 2D/3D/4D simplex
+    //               noise functions.
+    //      Author : Ian McEwan, Ashima Arts.
+    //  Maintainer : ijm
+    //     Lastmod : 20110822 (ijm)
+    //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
+    //               Distributed under the MIT License. See LICENSE file.
+    //               https://github.com/ashima/webgl-noise
+    //
+
+    vec3 mod289(vec3 x) {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+    }
+
+    vec4 mod289(vec4 x) {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+    }
+
+    vec4 permute(vec4 x) {
+        return mod289(((x*34.0)+1.0)*x);
+    }
+
+    vec4 taylorInvSqrt(vec4 r) {
+        return 1.79284291400159 - 0.85373472095314 * r;
+    }
+
+    float snoise(vec3 v) {
+        const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+        const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+
+        vec3 i  = floor(v + dot(v, C.yyy) );
+        vec3 x0 =   v - i + dot(i, C.xxx) ;
+
+        vec3 g = step(x0.yzx, x0.xyz);
+        vec3 l = 1.0 - g;
+        vec3 i1 = min( g.xyz, l.zxy );
+        vec3 i2 = max( g.xyz, l.zxy );
+
+        vec3 x1 = x0 - i1 + C.xxx;
+        vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
+        vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+
+        i = mod289(i);
+        vec4 p = permute( permute( permute(
+            i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+            + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
+            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+
+        float n_ = 0.142857142857; // 1.0/7.0
+        vec3  ns = n_ * D.wyz - D.xzx;
+
+        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+
+        vec4 x_ = floor(j * ns.z);
+        vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+
+        vec4 x = x_ *ns.x + ns.yyyy;
+        vec4 y = y_ *ns.x + ns.yyyy;
+        vec4 h = 1.0 - abs(x) - abs(y);
+
+        vec4 b0 = vec4( x.xy, y.xy );
+        vec4 b1 = vec4( x.zw, y.zw );
+
+        vec4 s0 = floor(b0)*2.0 + 1.0;
+        vec4 s1 = floor(b1)*2.0 + 1.0;
+        vec4 sh = -step(h, vec4(0.0));
+
+        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+
+        vec3 p0 = vec3(a0.xy,h.x);
+        vec3 p1 = vec3(a0.zw,h.y);
+        vec3 p2 = vec3(a1.xy,h.z);
+        vec3 p3 = vec3(a1.zw,h.w);
+
+        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+        p0 *= norm.x;
+        p1 *= norm.y;
+        p2 *= norm.z;
+        p3 *= norm.w;
+
+        vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+        m = m * m;
+        return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+    }
+
+    float surface(vec3 coord) {
+    float n = 0.0;
+    n += 1.0 * abs(snoise(coord));
+    n += 0.5 * abs(snoise(coord * 2.0));
+    n += 0.25 * abs(snoise(coord * 4.0));
+    n += 0.125 * abs(snoise(coord * 8.0));
+    float rn = 1.0 - n;
+    return rn * rn;
+    }
+
+    //transforms.glsl
+    vec3 transformPosition(vec3 pos, mat4 viewMat, vec3 mvPos) {
+        vec4 worldPosition = viewMat * vec4(pos, 1.0);
+        return worldPosition.xyz - mvPos;
+    }
+    
+    vec3 transformPosition(vec3 pos, mat4 viewMat, vec4 mvPos) {
+        vec4 worldPosition = viewMat * vec4(pos, 1.0);
+        return worldPosition.xyz - mvPos.xyz;
+    }
+
+    void main() {
+        vec3 pos = position;
+        vec3 transformedNormal = normalMatrix * normal;
+    
+        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+    
+        vec3 lVector = transformPosition(light, viewMatrix, mvPosition);
+        float lVolume = dot(normalize(transformedNormal), normalize(lVector));
+        float volume = range(lVolume, 0.0, 1.0, 0.0, 1.05);
+    
+        vColor = mix(ambient1, ambient2, volume);
+    
+        vUv = uv;
+        gl_Position = projectionMatrix * mvPosition;
+    
+        vec3 lPos = vec3(0.0, 0.0, 500.0);
+        float dProd = 1.0 - dot(normalize(lPos), normalMatrix * normal);
+        vec3 rim = clamp(range(dProd, 0.92, 1.0, 0.0, 1.0), 0.0, 1.0) * rimColor * 0.3;
+    
+        vColor += rim;
+    
+        vAlpha = mix(1.0, smoothstep(-27.0, -17.0, mvPosition.y), fadeOut);
+    }
+</script>
+<script id="fs_sea" type="x-shader/x-fragment">
+    varying vec2 vUv;
+    varying vec3 vColor;
+    varying float vAlpha;
+
+    uniform sampler2D map;
+
+    void main() {
+        vec3 color = vColor;
+
+        vec4 shadowColor = texture2D(map, vUv);
+        color.rgb *= shadowColor.rgb;
+
+        gl_FragColor = vec4(color, vAlpha);
+    }
+</script>
+<script id="vs_sphere" type="x-shader/x-vertex">
+    varying vec3 vReflect;
+    varying float vFalloff;
+    varying vec3 vColor;
+
+    vec3 inverseTransformDirection(in vec3 normal, in mat4 matrix) {
+        return normalize((matrix * vec4(normal, 0.0) * matrix).xyz);
+    }
+    
+    vec3 reflection(vec4 worldPosition) {
+        vec3 transformedNormal = normalMatrix * normal;
+        vec3 cameraToVertex = normalize(worldPosition.xyz - cameraPosition);
+        vec3 worldNormal = inverseTransformDirection(transformedNormal, viewMatrix);
+        
+        return reflect(cameraToVertex, worldNormal);
+    }
+    
+    vec3 refraction(vec4 worldPosition, float refractionRatio) {
+        vec3 transformedNormal = normalMatrix * normal;
+        vec3 cameraToVertex = normalize(worldPosition.xyz - cameraPosition);
+        vec3 worldNormal = inverseTransformDirection(transformedNormal, viewMatrix);
+        
+        return refract(cameraToVertex, worldNormal, refractionRatio);
+    }
+    float range(float oldValue, float oldMin, float oldMax, float newMin, float newMax) {
+        float oldRange = oldMax - oldMin;
+        float newRange = newMax - newMin;
+        return (((oldValue - oldMin) * newRange) / oldRange) + newMin;
+    }
+
+    void main() {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+        vec3 pos = (modelMatrix * vec4(position, 1.0)).xyz;
+
+        vec3 reflPos = position;
+        reflPos.x *= -1.0;
+        reflPos.y *= -1.0;
+
+        vReflect = reflection(modelMatrix * vec4(reflPos, 1.0));
+        vFalloff = pow(range(abs(pos.z), 0.0, 180.0, 1.0, 0.0), 1.5);
+
+    }
+</script>
+<script id="fs_sphere" type="x-shader/x-fragment">
+    uniform samplerCube tCube;
+
+    varying vec3 vReflect;
+    varying vec3 vColor;
+    varying float vFalloff;
+
+    vec3 reflection(vec3 worldPosition, vec3 normal) {
+        vec3 cameraToVertex = normalize(worldPosition - cameraPosition);
+        
+        return reflect(cameraToVertex, normal);
+    }
+    
+    vec3 refraction(vec3 worldPosition, vec3 normal, float rRatio) {
+        vec3 cameraToVertex = normalize(worldPosition - cameraPosition);
+        
+        return refract(cameraToVertex, normal, rRatio);
+    }
+    
+    vec4 envColor(samplerCube map, vec3 vec) {
+        float flipNormal = 1.0;
+        return textureCube(map, flipNormal * vec3(-1.0 * vec.x, vec.yz));
+    }
+
+    void main() {
+        gl_FragColor = envColor(tCube, vReflect) * 0.4 * vFalloff;
+    //    gl_FragColor = vec4(vColor, 1.0);
+    }
+</script>
+<script id="vs_back" type="x-shader/x-vertex">
+    uniform vec2 resolution;
+    varying vec2 vUv;
+
+    void main() {
+        vUv = uv;
+
+        gl_Position = vec4(position, 1.0);
+    }
+</script>
+<script id="fs_back" type="x-shader/x-fragment">
+    uniform vec2 resolution;
+    uniform float time;
+    uniform vec3 color0;
+    uniform vec3 color1;
+    uniform vec3 color2;
+    uniform float override;
+
+    varying vec2 vUv;
+
+    mat3 rotationXY(vec2 angle) {
+        float cp = cos(angle.x);
+        float sp = sin(angle.x);
+        float cy = cos(angle.y);
+        float sy = sin(angle.y);
+
+        return mat3(
+            cy , 0.0, -sy,
+            sy * sp, cp, cy * sp,
+            sy * cp, -sp, cy * cp
+        );
+    }
+
+    vec3 mixColor(vec3 normal, vec3 baseColor, vec3 addColor, vec3 position, float amount, float falloff) {
+
+        // Compares the color's vector to the ray's vector and fades it out exponentially
+        float strength = pow(max(0.0, dot(normal, normalize(position))), 2.0 * falloff);
+        return mix(baseColor, addColor, strength * amount);
+    }
+
+    vec3 background(vec3 normal) {
+
+        // Set base color
+        vec3 color = color0;
+
+        // Calculate colors' positions
+        vec3 mixPos1 = vec3(1.0, 1.0, 0.0);
+        vec3 mixPos2 = vec3(-1.0, -1.0, 0.0);
+
+        color = mixColor(normal, color, color1, mixPos1, 1.0, 0.8);
+        color = mixColor(normal, color, color2, mixPos2, 1.0, 1.0);
+
+        return color;
+    }
+
+    void main() {
+        vec2 uv = vUv;
+
+        vec4 direction = vec4(normalize(vec3(uv, 1.0)), 1.0);
+
+        // Apply camera movement
+        direction *= viewMatrix;
+
+        // Animate the rotation
+        mat3 rot = rotationXY(vec2(time * 0.0005, time * 0.0003));
+        direction.xyz *= rot;
+
+        vec4 sphere = vec4(background(-direction.xyz), 1.0);
+
+        gl_FragColor = sphere * override;
+
     }
 </script>
 <script src="{% static 'animation/js/three.min.js' %}"></script>

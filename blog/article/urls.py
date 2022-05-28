@@ -9,4 +9,6 @@ urlpatterns = [
     path('article-create/', views.article_create, name='article_create'),
     path('article-delete/<int:id>/', views.article_delete, name='article_delete'),
     path('article-edit/<int:id>/', views.article_edit, name='article_edit'),
+    path('earth_json/', views.earth_json, name="earth_json"),
+    path('img/shadow.jpg', )
 ]

@@ -1,9 +1,12 @@
+import imp
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from .models import ArticlePost
 from .forms import ArticlePostForm
 import markdown
+import json
 
 def article_list(request):
     articles = ArticlePost.objects.all()
@@ -66,3 +69,11 @@ def article_edit(request, id):
         article_post_form = ArticlePostForm()
         context = {'action': 'edit', 'article': article, 'article_post_form': article_post_form}
         return render(request, 'article/edit.html', context)
+
+def earth_json(request):
+    with open("static/animation/json/earth.json","r") as f:
+        earth_data = json.load(f)
+    return JsonResponse(earth_data)
+
+def get_img(request):
+    
