@@ -74,6 +74,3 @@ def earth_json(request):
     with open("static/animation/json/earth.json","r") as f:
         earth_data = json.load(f)
     return JsonResponse(earth_data)
-
-def get_img(request):
-    
