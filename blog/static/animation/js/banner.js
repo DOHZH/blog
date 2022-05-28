@@ -352,8 +352,8 @@ function render() {
     requestAnimationFrame(render);//请求再次执行渲染函数render
 }
 window.onresize=function(){
-    renderer.setSize(width,height);
-    camera.aspect = width/(height/2);
+    renderer.setSize(window.innerWidth,window.innerHeight/2);
+    camera.aspect = window.innerWidth/(window.innerHeight/2);
     camera.updateProjectionMatrix ();
 }
 render();
