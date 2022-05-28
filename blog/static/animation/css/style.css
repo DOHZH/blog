@@ -10,6 +10,7 @@
     font-family: banner_text;
     opacity: 0;
     font-weight: 900;
+    display: block;
 }
 .welcome{
     left:15%;
