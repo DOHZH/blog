@@ -8,6 +8,10 @@ Homepage
 {% block content %}
 
 <style>
+    @font-face{
+        font-family: banner_text;
+        src: url(./font/YouraScript-qZ51x-2.otf);
+    }
     button {
         border: none;
     }
@@ -134,6 +138,8 @@ Homepage
         $(".preview").fadeOut(500, ()=>{$("#mist").hide();});
     }
 </script>
+<script src="{% static 'animation/js/three.min.js' %}"></script>
+<script src="{% static 'animation/js/banner.js' %}"></script>
 
 {% endblock content %}
 

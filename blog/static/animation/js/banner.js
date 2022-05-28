@@ -79,7 +79,7 @@ class Earth extends Component{
                 },
                 map: {
                     type: "t",
-                    value: new THREE.TextureLoader().load("shadows.jpg")
+                    value: new THREE.TextureLoader().load("../img/shadows.jpg")
                 },
                 shadowMix: {
                     type: "f",
@@ -126,7 +126,7 @@ class Earth extends Component{
                 },
                 map: {
                     type: "t",
-                    value: new THREE.TextureLoader().load("shadows.jpg")
+                    value: new THREE.TextureLoader().load("../img/shadows.jpg")
                 },
                 shadowMix: {
                     type: "f",
@@ -166,7 +166,7 @@ class Earth extends Component{
         this._sphere.material = spheretexture;
         let plane = new THREE.PlaneBufferGeometry(1800, 1800);
         let img = new THREE.MeshBasicMaterial({
-            map: new THREE.TextureLoader().load("glow.png"),
+            map: new THREE.TextureLoader().load("../img/glow.png"),
             transparent: true,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
