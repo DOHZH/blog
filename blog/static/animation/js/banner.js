@@ -91,7 +91,7 @@ class Earth extends Component{
                 },
                 map: {
                     type: "t",
-                    value: new THREE.TextureLoader().load("static/animation/img/shadows.jpg")
+                    value: new THREE.TextureLoader().load(shadow_path)
                 },
                 shadowMix: {
                     type: "f",
@@ -138,7 +138,7 @@ class Earth extends Component{
                 },
                 map: {
                     type: "t",
-                    value: new THREE.TextureLoader().load("static/animation/img/shadows.jpg")
+                    value: new THREE.TextureLoader().load(shadow_path)
                 },
                 shadowMix: {
                     type: "f",

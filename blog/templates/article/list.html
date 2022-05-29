@@ -81,6 +81,9 @@ Homepage
         $(".preview").fadeOut(500, ()=>{$("#mist").hide();});
     }
 </script>
+<script>
+    let shadow_path = "{% static 'animation/img/shadows.jpg' %}"
+</script>
 <script id = "vs_land" type ="x-shader/x-vertex">
     varying vec3 vTransformedNormal;
     varying vec4 vmvPosition;
@@ -94,7 +97,7 @@ Homepage
         vUv = uv;
         gl_Position = projectionMatrix * mvPosition;
     }
-</script>
+</>
 <script id="fs_land" type="x-shader/x-fragment">
     varying vec3 vTransformedNormal;
     varying vec4 vmvPosition;
@@ -471,8 +474,8 @@ Homepage
 
     }
 </script>
-<script src="{% static 'animation/js/three.min.js' %}"></script>
-<script src="{% static 'animation/js/banner.js' %}"></script>
+<script src="{% static 'animation/js/three.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'animation/js/banner.js' %}" type="text/javascript"></script>
 
 {% endblock content %}
 
