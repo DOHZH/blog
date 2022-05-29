@@ -285,9 +285,21 @@ class Text{
     add_to_html(){
         this._parent.appendChild(this._html);
     }
+    resize(){
+        this._html.style.fontSize = Math.max(window.innerWidth, window.innerHeight)/15 + 'px';
+    }
     see(){
+        this._html.style.fontSize = Math.max(window.innerWidth, window.innerHeight)/15 + 'px';
         this._html.style.opacity = 1;
     }
+    // set_top(dt){
+    //     if (window.innerHeight <= window.innerWidth){
+    //         this._html.style.top = window.innerHeight * dt + "px";
+    //     }
+    //     else{
+    //         this._html.style.top = window.innerHeight * dt *2 + "px"
+    //     }
+    // }
 }
 
 let scene = new THREE.Scene(); 
@@ -354,6 +366,9 @@ function render() {
 window.onresize=function(){
     renderer.setSize(window.innerWidth,window.innerHeight/2);
     camera.aspect = window.innerWidth/(window.innerHeight/2);
+    welcome.resize();
+    my_text.resize();
+    my_text.set_top(0.3);
     camera.updateProjectionMatrix ();
 }
 render();
