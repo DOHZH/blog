@@ -276,14 +276,24 @@ class Text{
         this._parent.appendChild(this._html);
     }
     resize(){
-        this._html.style.fontSize = Math.min(body.offsetWidth, window.innerHeight)/3 + 'px';
+        let width = Math.min(body.offsetWidth, window.innerWidth); 
+        let height = window.innerHeight/2; 
+        this._html.style.fontSize = Math.min(width, height)/3 + 'px';
+        this._html.style.top = height/3 + "px";
+        this.hidden();
     }
     see(){
-        this._html.style.fontSize = Math.min(body.offsetWidth, window.innerHeight)/3 + 'px';
+        let width = Math.min(body.offsetWidth, window.innerWidth); 
+        let height = window.innerHeight/2; 
+        this._html.style.fontSize = Math.min(width, height)/3 + 'px';
+        this._html.style.top = height/3 + "px";
         this._html.style.opacity = 1;
+        this.hidden();
     }
-    top(){
-        this._html.style.top = document.getElementsByTagName("canvas")[0].offsetHeight/4 +"px";
+    hidden(){
+        if (window.innerWidth < 900){
+            this._html.style.opacity = 0;
+        }
     }
 }
 
@@ -305,15 +315,12 @@ scene.add(point);
 earth.getMod().translateY(-3);
 earth.getMod().translateX(3);
 
-let welcome = new Text("Welcome");
+let welcome = new Text("Welcome My Blog!");
 welcome.add_css("welcome");
-let my_text = new Text("My Blog!");
-my_text.add_css("blog_text");
 welcome.add_to_html();
-my_text.add_to_html();
 
 
-let width = body.offsetWidth; 
+let width = Math.min(body.offsetWidth, window.innerWidth); 
 let height = window.innerHeight/2; 
 let k = width / height; 
 let camera = new THREE.PerspectiveCamera(10, k, 1, 1000);
@@ -343,18 +350,16 @@ function render() {
     let text_banner = (camera.fov >= 55)&&(earth.getMod().position.y>=0);
     if (text_banner){
         welcome.see();
-        my_text.see();
-        my_text.top();
     }
     camera.updateProjectionMatrix ();
     requestAnimationFrame(render);//请求再次执行渲染函数render
 }
 window.onresize=function(){
-    renderer.setSize(body.offsetWidth,window.innerHeight/2);
-    camera.aspect = body.offsetWidth/(window.innerHeight/2);
+    let width = Math.min(body.offsetWidth, window.innerWidth); 
+    let height = window.innerHeight/2; 
+    renderer.setSize(width,height/2);
+    camera.aspect = width/(height/2);
     welcome.resize();
-    my_text.resize();
-    my_text.top();
     camera.updateProjectionMatrix ();
 }
 render();
