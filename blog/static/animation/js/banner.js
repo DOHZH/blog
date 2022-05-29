@@ -178,7 +178,7 @@ class Earth extends Component{
         this._sphere.material = spheretexture;
         let plane = new THREE.PlaneBufferGeometry(1800, 1800);
         let img = new THREE.MeshBasicMaterial({
-            map: new THREE.TextureLoader().load("static/animation/img/glow.png"),
+            map: new THREE.TextureLoader().load(glow_path),
             transparent: true,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
