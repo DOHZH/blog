@@ -368,7 +368,6 @@ window.onresize=function(){
     camera.aspect = window.innerWidth/(window.innerHeight/2);
     welcome.resize();
     my_text.resize();
-    my_text.set_top(0.3);
     camera.updateProjectionMatrix ();
 }
 render();
