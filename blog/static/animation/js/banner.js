@@ -282,6 +282,9 @@ class Text{
         this._html.style.fontSize = Math.max(body.offsetWidth, body.offsetHeight)/15 + 'px';
         this._html.style.opacity = 1;
     }
+    top(){
+        this._html.style.top = document.getElementsByTagName("canvas")[0].offsetHeight/4 +"px";
+    }
 }
 
 let scene = new THREE.Scene(); 
@@ -341,6 +344,7 @@ function render() {
     if (text_banner){
         welcome.see();
         my_text.see();
+        my_text.top();
     }
     camera.updateProjectionMatrix ();
     requestAnimationFrame(render);//请求再次执行渲染函数render
@@ -350,6 +354,7 @@ window.onresize=function(){
     camera.aspect = body.offsetWidth/(body.offsetHeight/2);
     welcome.resize();
     my_text.resize();
+    my_text.top();
     camera.updateProjectionMatrix ();
 }
 render();
