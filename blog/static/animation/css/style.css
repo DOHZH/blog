@@ -2,6 +2,9 @@
     margin: 0;
     padding: 0;
 }
+#banner{
+    overflow: hidden;
+}
 .banner_text {
     position: absolute;
     z-index: 100;

@@ -4,6 +4,7 @@ function lerp(ratio, start, end) {
 function rand(min, max){
     return this.lerp(Math.random(), min, max)
 }
+let body = document.getElementsByTagName("body")[0];
 
 class Component{
     constructor(path){
@@ -275,20 +276,12 @@ class Text{
         this._parent.appendChild(this._html);
     }
     resize(){
-        this._html.style.fontSize = Math.max(window.innerWidth, window.innerHeight)/15 + 'px';
+        this._html.style.fontSize = Math.max(body.offsetWidth, body.offsetHeight)/15 + 'px';
     }
     see(){
-        this._html.style.fontSize = Math.max(window.innerWidth, window.innerHeight)/15 + 'px';
+        this._html.style.fontSize = Math.max(body.offsetWidth, body.offsetHeight)/15 + 'px';
         this._html.style.opacity = 1;
     }
-    // set_top(dt){
-    //     if (window.innerHeight <= window.innerWidth){
-    //         this._html.style.top = window.innerHeight * dt + "px";
-    //     }
-    //     else{
-    //         this._html.style.top = window.innerHeight * dt *2 + "px"
-    //     }
-    // }
 }
 
 let scene = new THREE.Scene(); 
@@ -317,8 +310,8 @@ welcome.add_to_html();
 my_text.add_to_html();
 
 
-let width = window.innerWidth; 
-let height = window.innerHeight/2; 
+let width = body.offsetWidth; 
+let height = body.offsetHeight/2; 
 let k = width / height; 
 let camera = new THREE.PerspectiveCamera(10, k, 1, 1000);
 camera.position.set(0, 0, 5); 
@@ -353,8 +346,8 @@ function render() {
     requestAnimationFrame(render);//请求再次执行渲染函数render
 }
 window.onresize=function(){
-    renderer.setSize(window.innerWidth,window.innerHeight/2);
-    camera.aspect = window.innerWidth/(window.innerHeight/2);
+    renderer.setSize(body.offsetWidth,body.offsetHeight/2);
+    camera.aspect = body.offsetWidth/(body.offsetHeight/2);
     welcome.resize();
     my_text.resize();
     camera.updateProjectionMatrix ();
