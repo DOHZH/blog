@@ -69,8 +69,3 @@ def article_edit(request, id):
         article_post_form = ArticlePostForm()
         context = {'action': 'edit', 'article': article, 'article_post_form': article_post_form}
         return render(request, 'article/edit.html', context)
-
-def earth_json(request):
-    with open("static/animation/json/earth.json","r") as f:
-        earth_data = json.load(f)
-    return JsonResponse(earth_data)

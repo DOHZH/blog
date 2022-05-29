@@ -11,22 +11,11 @@ class Component{
     }
 
     loadModel(){
-        let mod_json;
-        $.ajax(
-            {
-                url:this._path,
-                data:{},
-                type:'GET',
-                success:function(data){
-                    mod_json = data;
-                },
-                error: function (xhr) {
-                    alert("error case");
-                    console.log(xhr.status);
-                },
-                async:false,
-            }
-        );
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", this._path, false);
+        xhr.send(null);
+        let imp = xhr.responseText;
+        let mod_json = JSON.parse(imp);
         const loader = new THREE.ObjectLoader();
         let model = loader.parse(mod_json);
         return model;
@@ -309,7 +298,7 @@ scene.add(axisHelper);
 let back = new Background();
 back.init();
 scene.add(back.getback());
-let earth = new Earth("/article/earth_json/");
+let earth = new Earth(json_path);
 earth.init();
 scene.add(earth.getMod());
 scene.add(earth.getglow());
