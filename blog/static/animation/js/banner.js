@@ -276,10 +276,10 @@ class Text{
         this._parent.appendChild(this._html);
     }
     resize(){
-        this._html.style.fontSize = Math.max(body.offsetWidth, body.offsetHeight)/15 + 'px';
+        this._html.style.fontSize = Math.min(body.offsetWidth, window.innerHeight)/3 + 'px';
     }
     see(){
-        this._html.style.fontSize = Math.max(body.offsetWidth, body.offsetHeight)/15 + 'px';
+        this._html.style.fontSize = Math.min(body.offsetWidth, window.innerHeight)/3 + 'px';
         this._html.style.opacity = 1;
     }
     top(){
@@ -314,7 +314,7 @@ my_text.add_to_html();
 
 
 let width = body.offsetWidth; 
-let height = body.offsetHeight/2; 
+let height = window.innerHeight/2; 
 let k = width / height; 
 let camera = new THREE.PerspectiveCamera(10, k, 1, 1000);
 camera.position.set(0, 0, 5); 
@@ -350,8 +350,8 @@ function render() {
     requestAnimationFrame(render);//请求再次执行渲染函数render
 }
 window.onresize=function(){
-    renderer.setSize(body.offsetWidth,body.offsetHeight/2);
-    camera.aspect = body.offsetWidth/(body.offsetHeight/2);
+    renderer.setSize(body.offsetWidth,window.innerHeight/2);
+    camera.aspect = body.offsetWidth/(window.innerHeight/2);
     welcome.resize();
     my_text.resize();
     my_text.top();
