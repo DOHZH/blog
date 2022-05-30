@@ -11,8 +11,46 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'article:article_create' %}">Write</a>
                 </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href='{% url "userprofile:edit" user.id %}'>Personal Message</a>
+                            <a class="dropdown-item" href='{% url "userprofile:logout" %}'>Log Out</a>
+                            <a class="dropdown-item" href="#" onclick="user_delete()">Delete</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'userprofile:login' %}">Log in</a>
+                    </li>
+                {% endif %}
+                
             </ul>
         </div>
 
     </div>
 </nav>
+{% if user.is_authenticated %}
+                <form
+                    style="display: none;"
+                    id="user_delete"
+                    action="{% url 'userprofile:delete' user.id %}"
+                    method="POST">
+                    {% csrf_token %}
+                    <button type="submit">send</button>
+                </form>
+<script>
+    function user_delete() {
+        layer.open({
+            title: "DELETE!",
+            content: "Are you sure to delete?",
+            yes: function (index, layero) {
+                $('form#user_delete button').click();
+                layer.close(index);
+            },
+        })
+    }
+</script>
+{% endif %}

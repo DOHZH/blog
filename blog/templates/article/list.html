@@ -1,16 +1,54 @@
 {% extends "base.html" %}
-{% load staticfiles %}
+{% load static %}
 
 {% block title %}
 Homepage
 {% endblock title %}
 
 {% block content %}
-
-<div id = banner>
-    <div id="text"></div>        
+<!--don't write any codes/notes in chinese! if you don't set the method to encode/decode then
+    python may meet problems like UnicodeDecodeError!  by--lpx   -->
+<div id="banner">
+    <div id="text"></div>
 </div>
-<div class="articles">
+<div class="container">
+    <!-- it'll better to be grey and unclickable after clicking-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'article:article_list' %}?search={{ search }}&tag={{ tag }}">newest
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'article:article_list' %}?order=total_views&search={{ search }}&tag={{ tag }}">hotest
+                </a>
+            </li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-auto mr-auto">
+            <form class="form-inline">
+                <label class="sr-only">content</label>
+                <input type="text"
+                    class="form-control mb-2 mr-sm-2"
+                    name="search"
+                    placeholder="search..."
+                    required>
+            </form>
+        </div>
+    </div>
+
+    {% if search %}
+        {% if articles %}
+        <h4><span style="color: red">"{{ search }}"</span>as following:</h4>
+    <hr>
+    {% else %}
+        <h4>none<span style="color: red">"{{ search }}"</span>related:</h4>
+    <hr>
+    {% endif %}
+    {% endif %}
+
+    <div class="articles">
         {% for article in articles %}
         <div class="my-card" onclick="show_more(this)">
             <div class="my-card-header">
@@ -21,46 +59,84 @@ Homepage
                 {{ article.body|safe }}
             </div>
             <div class="my-card-footer">
-                <a href="{% url 'article:article_detail' article.id %}"> more details </a>
+                <a href="{% url 'article:article_detail' article.id %}">more details </a>
+                <span>
+                    <small class="col align-self-end" style="color: gray;">views: {{ article.total_views }}
+                    </small>
+                </span>
+                <span>{% for tag in article.tags.all %}
+                        <a href="{% url 'article:article_list' %}?tag={{ tag }}"
+                            class="badge badge-secondary">{{ tag }}
+                        </a>
+                    {% endfor %}
+                </span>
             </div>
         </div>
         {% endfor %}
+
+
     </div>
 
-    <div id="mist" onclick="close_preview()"></div>
-    <div class="preview">
-        <div class="preview-header">
-            <div class="close-preview" onclick="close_preview()">
-                <i class="fa-solid fa-xmark rotate"></i>
-            </div>
-            <div class="preview-title"></div>
+    <div class="pagination row">
+        <div class="m-auto">
+            <span class="step-links">{% if articles.has_previous %}
+                <a href="?page=1&order={{ order }}&search={{ search }}&tag={{ tag }}" class="btn btn-success">&laquo; 1
+                </a>
+                <span>...</span>
+                <a href="?page={{ articles.previous_page_number }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
+                    class="btn btn-secondary">{{ articles.previous_page_number }}
+                </a>
+                {% endif %}
+                    <span class="current btn btn-danger btn-lg">{{ articles.number }}
+                    </span>
+
+                {% if articles.has_next %}
+                <a href="?page={{ articles.next_page_number }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
+                    class="btn btn-secondary">{{ articles.next_page_number }}
+                </a>
+                <span>...</span>
+                <a href="?page={{ articles.paginator.num_pages }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
+                    class="btn btn-success">{{ articles.paginator.num_pages }} &raquo;
+                </a>
+                {% endif %}
+            </span>
         </div>
-        <div class="preview-text"></div>
     </div>
 </div>
+<div id="mist" onclick="close_preview()"></div>
+<div class="preview">
+    <div class="preview-header">
+        <div class="close-preview" onclick="close_preview()">
+            <i class="fa-solid fa-xmark rotate"></i>
+        </div>
+        <div class="preview-title"></div>
+    </div>
+    <div class="preview-text"></div>
+</div>
+
 
 <script type="text/javascript">
     let maxlen = 500;
     let record = [];
-    (function(){
-        for(doc of document.getElementsByClassName("my-card-body")) {
+    (function () {
+        for (doc of document.getElementsByClassName("my-card-body")) {
             let text = doc.innerHTML
             record.push(text)
             let _text = "<div class=\"my-card-text\">"
             let flag = false
-            for(let i = 0; i < text.length; ++i) {
-                if(text[i] == '<') flag = true 
-                if(flag) {
-                    if(text[i] == '>') flag = false 
+            for (let i = 0; i < text.length; ++i) {
+                if (text[i] == '<') flag = true
+                if (flag) {
+                    if (text[i] == '>') flag = false
                     continue
                 }
-                if(text[i] == ' ' || text[i] == '\n') {
-                    if(_text == "" || _text[_text.length - 1] == ' ') continue;
+                if (text[i] == ' ' || text[i] == '\n') {
+                    if (_text == "" || _text[_text.length - 1] == ' ') continue;
                     _text += " ";
                 }
                 else _text += text[i];
             }
-            if(_text.length > maxlen) {
+            if (_text.length > maxlen) {
                 _text = _text.slice(0, maxlen)
                 _text += "..."
             }
@@ -77,8 +153,8 @@ Homepage
         $(".preview-text").html(record[ind]);
         $(".preview-title").html($(".my-card-header>a").eq(ind).html());
     }
-    function close_preview() {        
-        $(".preview").fadeOut(500, ()=>{$("#mist").hide();});
+    function close_preview() {
+        $(".preview").fadeOut(500, () => { $("#mist").hide(); });
     }
 </script>
 <script>
@@ -86,7 +162,7 @@ Homepage
     let glow_path = "{% static 'animation/img/glow.png' %}";
     let json_path = "{% static 'animation/json/earth.json' %}"
 </script>
-<script id = "vs_land" type ="x-shader/x-vertex">
+<script id="vs_land" type="x-shader/x-vertex">
     varying vec3 vTransformedNormal;
     varying vec4 vmvPosition;
     varying vec3 vPosition;
