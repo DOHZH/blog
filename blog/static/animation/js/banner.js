@@ -1,17 +1,17 @@
 function lerp(ratio, start, end) {
     return start + (end - start) * ratio
 }
-function rand(min, max){
+function rand(min, max) {
     return this.lerp(Math.random(), min, max)
 }
 let body = document.getElementsByTagName("body")[0];
 
-class Component{
-    constructor(path){
+class Component {
+    constructor(path) {
         this._path = path;
     }
 
-    loadModel(){
+    loadModel() {
         let xhr = new XMLHttpRequest();
         xhr.open("get", this._path, false);
         xhr.send(null);
@@ -23,8 +23,8 @@ class Component{
     }
 }
 
-class Earth extends Component{
-    constructor(path){
+class Earth extends Component {
+    constructor(path) {
         super(path);
         this._earth = this.loadModel();
         this._land;
@@ -42,21 +42,21 @@ class Earth extends Component{
         let radius = new Float32Array(position.count);
         let len = position.count;
         for (let i = 0; i < len; i++) {
-            angle[i] = Math.round(rand(0-0.5, 360+0.5))* (180 / Math.PI);
-            speed[i] = Math.round(rand(50 - 0.5, 150 + 0.5))/ 150;
-            radius[i] = Math.round(rand(-10-0.5, 10)) / 100;
+            angle[i] = Math.round(rand(0 - 0.5, 360 + 0.5)) * (180 / Math.PI);
+            speed[i] = Math.round(rand(50 - 0.5, 150 + 0.5)) / 150;
+            radius[i] = Math.round(rand(-10 - 0.5, 10)) / 100;
         }
         geom["angle"] = new THREE.BufferAttribute(angle, 1);
         geom["speed"] = new THREE.BufferAttribute(speed, 1);
         geom["radius"] = new THREE.BufferAttribute(radius, 1)
     }
 
-    initCube(){
+    initCube() {
         this._cube = new THREE.CubeCamera(10, 10000, 1024);
         this._model.add(this._cube);
     }
 
-    initMesh(){
+    initMesh() {
         this._model.add(this._earth);
         //land
         this._land = this._earth.children[0].children[0];
@@ -97,19 +97,19 @@ class Earth extends Component{
                 },
             },
             vertexShader: document.getElementById("vs_land").textContent,
-	        fragmentShader: document.getElementById("fs_land").textContent
+            fragmentShader: document.getElementById("fs_land").textContent
         });
         this._land.material = landtexture;
         this._land.scale.set(0.975, 0.975, 0.975);
         this._land.material.uniforms['ambient1'].value = new THREE.Color(9886694);
         this._land.material.uniforms['ambient2'].value = new THREE.Color(7248598);
-        
+
         //sea
         this._sea = this._earth.children[2].children[0];
         this._sea.frustumCulled = false;
         this._sea.geometry = new THREE.BufferGeometry().fromGeometry(this._sea.geometry);
         let seatexture = new THREE.ShaderMaterial({
-            uniforms : {
+            uniforms: {
                 light: {
                     type: "v3",
                     value: new THREE.Vector3(-5000, 2000, -5000)
@@ -144,15 +144,15 @@ class Earth extends Component{
                 },
             },
             vertexShader: document.getElementById("vs_sea").textContent,
-	        fragmentShader: document.getElementById("fs_sea").textContent
+            fragmentShader: document.getElementById("fs_sea").textContent
         });
         this._sea.material = seatexture;
         this.setOceanAttributes(this._sea.geometry);
-        
+
         //sphere
         this._sphere = this._earth.children[1].children[0];
         let spheretexture = new THREE.ShaderMaterial({
-            uniforms : {
+            uniforms: {
                 tCube: {
                     type: "t",
                     value: this._cube.texture
@@ -162,7 +162,7 @@ class Earth extends Component{
             depthWrite: false,
             blending: THREE.AdditiveBlending,
             vertexShader: document.getElementById("vs_sphere").textContent,
-	        fragmentShader: document.getElementById("fs_sphere").textContent
+            fragmentShader: document.getElementById("fs_sphere").textContent
         })
         this._sphere.scale.set(0.975, 0.975, 0.975);
         this._sphere.material = spheretexture;
@@ -173,7 +173,7 @@ class Earth extends Component{
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             side: THREE.DoubleSide,
-            opacity:0,
+            opacity: 0,
         });
         this._glow = new THREE.Mesh(plane, img);
         this._glow.frustumCulled = false;
@@ -183,24 +183,24 @@ class Earth extends Component{
         this._glow.scale.set(s_glow, s_glow, s_glow);
     }
 
-    init(){
+    init() {
         this.initCube();
         this.initMesh();
     }
 
-    getMod(){
+    getMod() {
         return this._model;
     }
 
-    getglow(){
+    getglow() {
         return this._glow;
     }
-    
+
 
 }
 
-class Background{
-    constructor(){
+class Background {
+    constructor() {
         this._colors = {
             purple: "#9da4e1",
             blue: "#83c9de",
@@ -210,10 +210,10 @@ class Background{
         this._object3D;
     }
 
-    init(){
+    init() {
         let geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
         this._shader = new THREE.ShaderMaterial({
-            uniforms:{
+            uniforms: {
                 time: {
                     type: "f",
                     value: 0
@@ -244,7 +244,7 @@ class Background{
                 }
             },
             vertexShader: document.getElementById("vs_back").textContent,
-	        fragmentShader: document.getElementById("fs_back").textContent
+            fragmentShader: document.getElementById("fs_back").textContent
         });
         this._shader.depthTest = false;
         let mesh = new THREE.Mesh(geometry, this._shader);
@@ -253,51 +253,51 @@ class Background{
     }
 
     //背景循环
-    loop(dt){
+    loop(dt) {
         this._shader.uniforms.time.value += dt;
     }
 
-    getback(){
+    getback() {
         return this._object3D;
     }
 }
 
-class Text{
-    constructor(text){
+class Text {
+    constructor(text) {
         this._html = document.createElement("div");
         this._parent = document.getElementById("text");
         this._html.textContent = text;
         this._html.className = "banner_text";
     }
-    add_css(css_name){
+    add_css(css_name) {
         this._html.classList.add(css_name);
     }
-    add_to_html(){
+    add_to_html() {
         this._parent.appendChild(this._html);
     }
-    resize(){
-        let width = Math.min(body.offsetWidth, window.innerWidth); 
-        let height = window.innerHeight/2; 
-        this._html.style.fontSize = Math.min(width, height)/3 + 'px';
-        this._html.style.top = height/3 + "px";
+    resize() {
+        let width = Math.min(body.offsetWidth, window.innerWidth);
+        let height = window.innerHeight / 2;
+        this._html.style.fontSize = Math.min(width, height) / 3 + 'px';
+        this._html.style.top = height / 3 + "px";
         this.hidden();
     }
-    see(){
-        let width = Math.min(body.offsetWidth, window.innerWidth); 
-        let height = window.innerHeight/2; 
-        this._html.style.fontSize = Math.min(width, height)/3 + 'px';
-        this._html.style.top = height/3 + "px";
+    see() {
+        let width = Math.min(body.offsetWidth, window.innerWidth);
+        let height = window.innerHeight / 2;
+        this._html.style.fontSize = Math.min(width, height) / 3 + 'px';
+        this._html.style.top = height / 3 + "px";
         this._html.style.opacity = 1;
         this.hidden();
     }
-    hidden(){
-        if (window.innerWidth < 900){
+    hidden() {
+        if (window.innerWidth < 900) {
             this._html.style.opacity = 0;
         }
     }
 }
 
-let scene = new THREE.Scene(); 
+let scene = new THREE.Scene();
 let stage = document.getElementById("banner");
 var axisHelper = new THREE.AxisHelper(250);
 scene.add(axisHelper);
@@ -315,16 +315,16 @@ scene.add(point);
 earth.getMod().translateY(-3);
 earth.getMod().translateX(3);
 
-let welcome = new Text("Welcome My Blog!");
+let welcome = new Text("Welcome To My Blog!");
 welcome.add_css("welcome");
 welcome.add_to_html();
 
 
-let width = Math.min(body.offsetWidth, window.innerWidth); 
-let height = window.innerHeight/2; 
-let k = width / height; 
+let width = Math.min(body.offsetWidth, window.innerWidth);
+let height = window.innerHeight / 2;
+let k = width / height;
 let camera = new THREE.PerspectiveCamera(10, k, 1, 1000);
-camera.position.set(0, 0, 5); 
+camera.position.set(0, 0, 5);
 camera.lookAt(scene.position);
 
 let renderer = new THREE.WebGLRenderer();
@@ -336,30 +336,30 @@ renderer.render(scene, camera);
 let T0 = new Date();
 function render() {
     let T1 = new Date();
-    let t = T1-T0;
-    T0=T1
-    renderer.render(scene,camera);//执行渲染操作
-    earth.getMod().rotateY(0.001*t);//旋转角速度0.001弧度每毫秒，绕y轴
+    let t = T1 - T0;
+    T0 = T1
+    renderer.render(scene, camera);//执行渲染操作
+    earth.getMod().rotateY(0.001 * t);//旋转角速度0.001弧度每毫秒，绕y轴
     back.loop(50);
-    if (earth.getMod().position.y<0){
-        earth.getMod().translateY(0.0015*t);
+    if (earth.getMod().position.y < 0) {
+        earth.getMod().translateY(0.0015 * t);
     }
-    if (camera.fov <55){
-        camera.fov += 0.02*t;
+    if (camera.fov < 55) {
+        camera.fov += 0.02 * t;
     }
-    let text_banner = (camera.fov >= 55)&&(earth.getMod().position.y>=0);
-    if (text_banner){
+    let text_banner = (camera.fov >= 55) && (earth.getMod().position.y >= 0);
+    if (text_banner) {
         welcome.see();
     }
-    camera.updateProjectionMatrix ();
+    camera.updateProjectionMatrix();
     requestAnimationFrame(render);//请求再次执行渲染函数render
 }
-window.onresize=function(){
-    let width = Math.min(body.offsetWidth, window.innerWidth); 
-    let height = window.innerHeight/2; 
-    renderer.setSize(width,height/2);
-    camera.aspect = width/(height/2);
+window.onresize = function () {
+    let width = Math.min(body.offsetWidth, window.innerWidth);
+    let height = window.innerHeight / 2;
+    renderer.setSize(width, height / 2);
+    camera.aspect = width / (height / 2);
     welcome.resize();
-    camera.updateProjectionMatrix ();
+    camera.updateProjectionMatrix();
 }
 render();
