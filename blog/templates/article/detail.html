@@ -67,16 +67,16 @@ Article Details
                     <strong style="color: rgb(192, 179, 120)">
                         {{ comment.user }}
                     </strong> comment in:
-                    <span style="color: rgb(52, 182, 52)">
+                    <span style="color: rgb(60, 168, 21)">
                         {{ comment.created|date:"Y-m-d H:i:s" }}
                     </span>
                 </p>
-                <pre style="font-family: inherit; font-size: 1em;">
+                <pre style="font-family: inherit; font-size: 1em; ">
 {{ comment.body }}</pre>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-3 mt-4">
+        <div class="col-3 mt-4" style="color: rgba(242, 144, 144, 0.777);">
             <h4><strong>Directory</strong></h4>
             <hr>
             <div>
@@ -95,11 +95,27 @@ Article Details
         layer.open({
             title: "Confirm",
             content: "Are you sure to delete this article?",
+            btn: ['Delete', 'Cancel'],
             yes: function (index, layero) {
                 $('form#delete button').click();
                 layer.close(index);
+            },
+            success: function (layero, index) {
+                addIconforBtn();
             }
-        })
+        }
+        )
+    }
+</script>
+
+<!--change color of layer btn-->
+<script>
+    function addIconforBtn() {
+        var btn1 = $(".layui-layer-btn .layui-layer-btn0");
+        btn1.css({
+            "background-color": "rgba(100,100,100, 0.6)",
+            "border-color": "rgb(0,0,0)",
+        });
     }
 </script>
 <!--latex-->
