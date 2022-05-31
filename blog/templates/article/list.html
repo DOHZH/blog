@@ -148,10 +148,10 @@ Homepage
     function Adjustment() {
         let doc = document.documentElement;
         let relHeight = (doc.clientHeight > doc.scrollHeight) ? doc.clientHeight : doc.scrollHeight;
-        document.getElementById('mist').style.height = relHeight + 'px';
+        $("#mist").css('height', relHeight + 'px');
         var top = ($(window).height() - $(".preview").height()) / 2;
         var scrollTop = $(document).scrollTop();
-        $(".preview").css({ position: 'absolute', 'top': top + scrollTop }).show();
+        $(".preview").css('top', top + scrollTop);
     }
     function show_more(obj) {
         Adjustment();
