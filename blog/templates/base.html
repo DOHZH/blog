@@ -12,22 +12,23 @@
     <link rel="stylesheet" href="{% static 'style/mainpage.css' %}">
     <link rel="stylesheet" href="{% static 'animation/css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-        />
-      </head>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- monikai.css -->
+    <link rel="stylesheet" href="{% static 'md_css/monokai.css' %}">
+    <!--mathjax-forlatex-->
+    <link rel="dns-prefetch" href="//cdn.mathjax.org" />
     <script src="https://cdn.bootcss.com/jquery/3.6.0/jquery.js"></script>
     <script src="https://kit.fontawesome.com/c66de8569e.js" crossorigin="anonymous"></script>
     <style>
-        @font-face{
+        @font-face {
             font-family: banner_text;
             src: url("{% static 'animation/font/YouraScript-qZ51x-2.otf' %}");
         }
+
         a {
             color: #5E3D50;
         }
+
         a:hover {
             color: #5E3D50;
         }
@@ -39,10 +40,10 @@
     {% block content %}{% endblock content %}
     {% include 'footer.html' %}
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1-lts/dist/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="{% static 'layer/layui.js' %}"></script>
 </body>
 
-</html>0
+</html>

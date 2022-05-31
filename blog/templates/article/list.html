@@ -29,21 +29,17 @@ Homepage
         <div class="col-auto mr-auto">
             <form class="form-inline">
                 <label class="sr-only">content</label>
-                <input type="text"
-                    class="form-control mb-2 mr-sm-2"
-                    name="search"
-                    placeholder="search..."
-                    required>
+                <input type="text" class="form-control mb-2 mr-sm-2" name="search" placeholder="search..." required>
             </form>
         </div>
     </div>
 
     {% if search %}
-        {% if articles %}
-        <h4><span style="color: red">"{{ search }}"</span>as following:</h4>
+    {% if articles %}
+    <h4><span style="color: red">"{{ search }}"</span>as following:</h4>
     <hr>
     {% else %}
-        <h4>none<span style="color: red">"{{ search }}"</span>related:</h4>
+    <h4>none<span style="color: red">"{{ search }}"</span>related:</h4>
     <hr>
     {% endif %}
     {% endif %}
@@ -65,9 +61,8 @@ Homepage
                     </small>
                 </span>
                 <span>{% for tag in article.tags.all %}
-                        <a href="{% url 'article:article_list' %}?tag={{ tag }}"
-                            class="badge badge-secondary">{{ tag }}
-                        </a>
+                    <a href="{% url 'article:article_list' %}?tag={{ tag }}" class="badge badge-secondary">{{ tag }}
+                    </a>
                     {% endfor %}
                 </span>
             </div>
@@ -87,8 +82,8 @@ Homepage
                     class="btn btn-secondary">{{ articles.previous_page_number }}
                 </a>
                 {% endif %}
-                    <span class="current btn btn-danger btn-lg">{{ articles.number }}
-                    </span>
+                <span class="current btn btn-danger btn-lg">{{ articles.number }}
+                </span>
 
                 {% if articles.has_next %}
                 <a href="?page={{ articles.next_page_number }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
@@ -114,6 +109,28 @@ Homepage
     <div class="preview-text"></div>
 </div>
 
+
+<!--latex-->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    showProcessingMessages: false,
+    messageStyle: "none",
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [['$', '$']], //行内公式选择$
+        displayMath: [["$$", "$$"]], //段内公式选择$$
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'], //避开某些标签
+        ignoreClass: "comment-content" //避开含该Class的标签
+    },
+    "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: true //关闭右击菜单显示
+    }
+});
+MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+</script>
+<script src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 <script type="text/javascript">
     let maxlen = 500;
@@ -142,6 +159,8 @@ Homepage
             }
             _text += "</div>"
             doc.innerHTML = _text
+            let preview = $(".my-card-body");
+            $(preview).on("click", function () { MathJax.Hub.Queue(["Typeset", MathJax.Hub]); });
         }
     })(window)
 
@@ -556,4 +575,3 @@ Homepage
 <script src="{% static 'animation/js/banner.js' %}"></script>
 
 {% endblock content %}
-
