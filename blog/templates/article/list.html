@@ -30,6 +30,7 @@ Homepage
             <form class="form-inline">
                 <label class="sr-only">content</label>
                 <input type="text" class="form-control mb-2 mr-sm-2" name="search" placeholder="search..." required>
+                <i class="fa fa-search" aria-hidden="true"></i>
             </form>
         </div>
     </div>
@@ -75,7 +76,7 @@ Homepage
     <div class="pagination row">
         <div class="m-auto">
             <span class="step-links">{% if articles.has_previous %}
-                <a href="?page=1&order={{ order }}&search={{ search }}&tag={{ tag }}" class="btn btn-success">&laquo; 1
+                <a href="?page=1&order={{ order }}&search={{ search }}&tag={{ tag }}" class="btn btn-success">&laquo;
                 </a>
                 <span>...</span>
                 <a href="?page={{ articles.previous_page_number }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
@@ -110,27 +111,7 @@ Homepage
 </div>
 
 
-<!--latex-->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    showProcessingMessages: false,
-    messageStyle: "none",
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-        inlineMath: [['$', '$']], //行内公式选择$
-        displayMath: [["$$", "$$"]], //段内公式选择$$
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'], //避开某些标签
-        ignoreClass: "comment-content" //避开含该Class的标签
-    },
-    "HTML-CSS": {
-        availableFonts: ["STIX", "TeX"], //可选字体
-        showMathMenu: true //关闭右击菜单显示
-    }
-});
-MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-</script>
-<script src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 
 <script type="text/javascript">
     let maxlen = 500;
@@ -573,5 +554,26 @@ MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 </script>
 <script src="{% static 'animation/js/three.min.js' %}"></script>
 <script src="{% static 'animation/js/banner.js' %}"></script>
+<!--latex-->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    showProcessingMessages: false,
+    messageStyle: "none",
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [['$', '$']], //行内公式选择$
+        displayMath: [["$$", "$$"]], //段内公式选择$$
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'], //避开某些标签
+        ignoreClass: "comment-content" //避开含该Class的标签
+    },
+    "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: true //关闭右击菜单显示
+    }
+});
+MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+</script>
+<script src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 {% endblock content %}

@@ -29,6 +29,20 @@ Article Details
 </div>
 
 <script src="{% static 'layer/layui.js' %}"></script>
+
+
+<script>
+    function confirm_delete() {
+        layer.open({
+            title: "Confirm",
+            content: "Are you sure to delete this article?",
+            yes: function (index, layero) {
+                $('form#delete button').click();
+                layer.close(index);
+            }
+        })
+    }
+</script>
 <!--latex-->
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -50,18 +64,4 @@ Article Details
 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 </script>
 <script src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-<script>
-    function confirm_delete() {
-        layer.open({
-            title: "Confirm",
-            content: "Are you sure to delete this article?",
-            yes: function (index, layero) {
-                $('form#delete button').click();
-                layer.close(index);
-            }
-        })
-    }
-</script>
-
 {% endblock content %}
