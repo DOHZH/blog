@@ -9,21 +9,33 @@ Article Details
 
 <div class="container">
     <div class="row">
-        <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
-        <div class="col-12 alert alert-success">Author: {{ article.author }}
-            {% if user == article.author %}
-            · {{ article.created }}
-            · <a href="#" onclick="confirm_delete()">Delete</a>
-            {% endif %}
-            <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
-                method="POST">
-                {% csrf_token %}
-                <button type="submit">Send</button>
-            </form>
-            · <a href="{% url 'article:article_edit' article.id %}">Edit</a>
+        <div class="col-9">
+            <h1 class="mt-4 mb-4">{{ article.title }}</h1>
+            <div class="alert alert-success">Author: {{ article.author }}
+                {% if user == article.author %}
+                · {{ article.created }}
+                · <a href="#" onclick="confirm_delete()">Delete</a>
+                <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
+                    method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Send</button>
+                </form>
+                · <a href="{% url 'article:article_edit' article.id %}">Edit</a>
+                {% endif %}
+            </div>
+            <div class="col-12 detail-article">
+                <div class="col-2"></div>
+                <div class="col-10">
+                    <p>{{ article.body|safe }}</p>
+                </div>
+            </div>
         </div>
-        <div class="col-12 detail-article">
-            <p>{{ article.body|safe }}</p>
+        <div class="col-3 mt-4">
+            <h4><strong>Directory</strong></h4>
+            <hr>
+            <div>
+                {{ toc|safe }}
+            </div>
         </div>
     </div>
 </div>
@@ -51,14 +63,14 @@ Article Details
     extensions: ["tex2jax.js"],
     jax: ["input/TeX", "output/HTML-CSS"],
     tex2jax: {
-        inlineMath: [['$', '$']], //行内公式选择$
-        displayMath: [["$$", "$$"]], //段内公式选择$$
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'], //避开某些标签
-        ignoreClass: "comment-content" //避开含该Class的标签
+        inlineMath: [['$', '$']], 
+        displayMath: [["$$", "$$"]], 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'],
+        ignoreClass: "comment-content" 
     },
     "HTML-CSS": {
-        availableFonts: ["STIX", "TeX"], //可选字体
-        showMathMenu: true //关闭右击菜单显示
+        availableFonts: ["STIX", "TeX"], 
+        showMathMenu: true 
     }
 });
 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
