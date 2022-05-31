@@ -140,12 +140,21 @@ Homepage
             }
             _text += "</div>"
             doc.innerHTML = _text
-            let preview = $(".my-card-body");
-            $(preview).on("click", function () { MathJax.Hub.Queue(["Typeset", MathJax.Hub]); });
+            let Preview = $(".my-card-body");
+            $(Preview).on("click", function () { MathJax.Hub.Queue(["Typeset", MathJax.Hub]); });
         }
     })(window)
 
+    function Adjustment() {
+        let doc = document.documentElement;
+        let relHeight = (doc.clientHeight > doc.scrollHeight) ? doc.clientHeight : doc.scrollHeight;
+        document.getElementById('mist').style.height = relHeight + 'px';
+        var top = ($(window).height() - $(".preview").height()) / 2;
+        var scrollTop = $(document).scrollTop();
+        $(".preview").css({ position: 'absolute', 'top': top + scrollTop }).show();
+    }
     function show_more(obj) {
+        Adjustment();
         ind = $(".my-card").index(obj);
         // console.log(ind);
         $("#mist").show();
