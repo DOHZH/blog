@@ -12,8 +12,8 @@ Article Details
         <div class="col-9">
             <h1 class="mt-4 mb-4">{{ article.title }}</h1>
             <div class="alert alert-success">Author: {{ article.author }}
-                {% if user == article.author %}
                 · {{ article.created }}
+                {% if user == article.author %}
                 · <a href="#" onclick="confirm_delete()">Delete</a>
                 <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
                     method="POST">
@@ -29,6 +29,52 @@ Article Details
                     <p>{{ article.body|safe }}</p>
                 </div>
             </div>
+            <!-- make comment -->
+            <hr>
+            {% if user.is_authenticated %}
+            <div>
+                <form action="{% url 'comment:post_comment' article.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="body">
+                            <strong>
+                                Comment:
+                            </strong>
+                        </label>
+                        <textarea type="text" class="form-control" id="body" name="body" rows="2"></textarea>
+                    </div>
+                    <!-- submit -->
+                    <button type="submit" class="btn btn-secondary ">Submit</button>
+                </form>
+            </div>
+            <br>
+            {% else %}
+            <br>
+            <h5 class="row justify-content-center">
+                Please<a href="{% url 'userprofile:login' %}"> comment </a>after login
+            </h5>
+            <br>
+            {% endif %}
+
+
+
+            <!-- show comments -->
+            <h4>{{ comments.count }} comments in total</h4>
+            <div>
+                {% for comment in comments %}
+                <hr>
+                <p>
+                    <strong style="color: rgb(192, 179, 120)">
+                        {{ comment.user }}
+                    </strong> comment in:
+                    <span style="color: rgb(52, 182, 52)">
+                        {{ comment.created|date:"Y-m-d H:i:s" }}
+                    </span>
+                </p>
+                <pre style="font-family: inherit; font-size: 1em;">
+{{ comment.body }}</pre>
+                {% endfor %}
+            </div>
         </div>
         <div class="col-3 mt-4">
             <h4><strong>Directory</strong></h4>
@@ -38,6 +84,7 @@ Article Details
             </div>
         </div>
     </div>
+
 </div>
 
 <script src="{% static 'layer/layui.js' %}"></script>

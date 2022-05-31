@@ -60,14 +60,15 @@ def article_view_counter(request, id):
 def article_detail(request, id):
     article_view_counter(request, id)
     article = ArticlePost.objects.get(id=id)
+    comments = Comment.objects.filter(article=id)
     md = markdown.Markdown(extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
         'markdown.extensions.toc',
     ])
     article.body = md.convert(article.body)
-    #comments = Comment.objects.filter(article=id)
-    context = {'article': article, 'toc': md.toc}
+
+    context = {'article': article, 'toc': md.toc, 'comments': comments}
     return render(request, 'article/detail.html', context)
 
 
