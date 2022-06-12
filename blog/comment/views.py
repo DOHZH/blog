@@ -22,9 +22,6 @@ def post_comment(request, article_id):
             new_comment.save()
             return redirect(article)
         else:
-            return HttpResponse("Something wrong with the form.")
+            return HttpResponse("invalid form!")
     else:
-        return HttpResponse(
-            "Only POST method is accepted while you make comments.")
-
-
+        return HttpResponse("Only POST request allowed.")

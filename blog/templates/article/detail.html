@@ -24,8 +24,7 @@ Article Details
                 {% endif %}
             </div>
             <div class="col-12 detail-article">
-                <div class="col-2"></div>
-                <div class="col-10">
+                <div class="col-12">
                     <p>{{ article.body|safe }}</p>
                 </div>
             </div>
@@ -41,7 +40,10 @@ Article Details
                                 Comment:
                             </strong>
                         </label>
-                        <textarea type="text" class="form-control" id="body" name="body" rows="2"></textarea>
+                        <div>
+                            {{ comment_form.media }}
+                            {{ comment_form.body }}
+                        </div>
                     </div>
                     <!-- submit -->
                     <button type="submit" class="btn btn-secondary ">Submit</button>
@@ -51,7 +53,7 @@ Article Details
             {% else %}
             <br>
             <h5 class="row justify-content-center">
-                Please<a href="{% url 'userprofile:login' %}"> comment </a>after login
+                Please comment after&nbsp;<a href="{% url 'userprofile:login' %}">login</a>
             </h5>
             <br>
             {% endif %}
@@ -71,8 +73,8 @@ Article Details
                         {{ comment.created|date:"Y-m-d H:i:s" }}
                     </span>
                 </p>
-                <pre style="font-family: inherit; font-size: 1em; ">
-{{ comment.body }}</pre>
+                <div>{{ comment.body|safe }}</div>
+
                 {% endfor %}
             </div>
         </div>

@@ -51,7 +51,11 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="{% static 'layer/layui.js' %}"></script>
     <script src="{% static 'otherjs/back_to_top.js' %}"></script>
-
+    {% block script %}
+    <script>
+        $(".django-ckeditor-widget").removeAttr('style');
+    </script>
+    {% endblock script %}
 
 </body>
 

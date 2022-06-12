@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from comment.models import Comment
+from comment.forms import CommentForm
 
 
 def article_list(request):
@@ -44,7 +45,7 @@ def article_list(request):
         'articles': articles,
         'order': order,
         'search': search,
-        'tag': tag
+        'tag': tag,
     }
     return render(request, 'article/list.html', context)
 
@@ -61,6 +62,7 @@ def article_detail(request, id):
     article_view_counter(request, id)
     article = ArticlePost.objects.get(id=id)
     comments = Comment.objects.filter(article=id)
+    comment_form = CommentForm()
     md = markdown.Markdown(extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
@@ -68,7 +70,10 @@ def article_detail(request, id):
     ])
     article.body = md.convert(article.body)
 
-    context = {'article': article, 'toc': md.toc, 'comments': comments}
+    context = {'article': article,
+               'toc': md.toc,
+               'comments': comments,
+               'comment_form': comment_form,}
     return render(request, 'article/detail.html', context)
 
 
