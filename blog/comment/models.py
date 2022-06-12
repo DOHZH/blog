@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from article.models import ArticlePost
 from ckeditor.fields import RichTextField
+from mptt.models import TreeForeignKey
 
 
 # comments
@@ -29,7 +30,7 @@ class Comment(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
-     class MPTTMeta:
+    class MPTTMeta:
         order_insertion_by = ['created']
 
     def __str__(self):
