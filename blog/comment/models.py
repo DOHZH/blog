@@ -13,10 +13,24 @@ class Comment(models.Model):
                              on_delete=models.CASCADE,
                              related_name='comments')
     body = RichTextField() 
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='children'
+    )
+    reply_to = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='replyers'
+    )
     created = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ('created', )
+     class MPTTMeta:
+        order_insertion_by = ['created']
 
     def __str__(self):
         return self.body[:20]
