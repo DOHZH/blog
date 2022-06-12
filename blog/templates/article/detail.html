@@ -9,38 +9,136 @@ Article Details
 
 <div class="container">
     <div class="row">
-        <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
-        <div class="col-12 alert alert-success">Author: {{ article.author }}
-            {% if user == article.author %}
-            · {{ article.created }}
-            · <a href="#" onclick="confirm_delete()">Delete</a>
+        <div class="col-9">
+            <h1 class="mt-4 mb-4">{{ article.title }}</h1>
+            <div class="alert alert-success">Author: {{ article.author }}
+                · {{ article.created }}
+                {% if user == article.author %}
+                · <a href="#" onclick="confirm_delete()">Delete</a>
+                <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
+                    method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Send</button>
+                </form>
+                · <a href="{% url 'article:article_edit' article.id %}">Edit</a>
+                {% endif %}
+            </div>
+            <div class="col-12 detail-article">
+                <div class="col-12">
+                    <p>{{ article.body|safe }}</p>
+                </div>
+            </div>
+            <!-- make comment -->
+            <hr>
+            {% if user.is_authenticated %}
+            <div>
+                <form action="{% url 'comment:post_comment' article.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="body">
+                            <strong>
+                                Comment:
+                            </strong>
+                        </label>
+                        <div>
+                            {{ comment_form.media }}
+                            {{ comment_form.body }}
+                        </div>
+                    </div>
+                    <!-- submit -->
+                    <button type="submit" class="btn btn-secondary ">Submit</button>
+                </form>
+            </div>
+            <br>
+            {% else %}
+            <br>
+            <h5 class="row justify-content-center">
+                Please comment after&nbsp;<a href="{% url 'userprofile:login' %}">login</a>
+            </h5>
+            <br>
             {% endif %}
-            <form style="display:none;" id="delete" action="{% url 'article:article_delete' article.id %}"
-                method="POST">
-                {% csrf_token %}
-                <button type="submit">Send</button>
-            </form>
-            · <a href="{% url 'article:article_edit' article.id %}">Edit</a>
+
+
+
+            <!-- show comments -->
+            <h4>{{ comments.count }} comments in total</h4>
+            <div>
+                {% for comment in comments %}
+                <hr>
+                <p>
+                    <strong style="color: rgb(192, 179, 120)">
+                        {{ comment.user }}
+                    </strong> comment in:
+                    <span style="color: rgb(60, 168, 21)">
+                        {{ comment.created|date:"Y-m-d H:i:s" }}
+                    </span>
+                </p>
+                <div>{{ comment.body|safe }}</div>
+
+                {% endfor %}
+            </div>
         </div>
-        <div class="col-12 detail-article">
-            <p>{{ article.body|safe }}</p>
+        <div class="col-3 mt-4" style="color: rgba(242, 144, 144, 0.777);">
+            <h4><strong>Directory</strong></h4>
+            <hr>
+            <div>
+                {{ toc|safe }}
+            </div>
         </div>
     </div>
+
 </div>
 
 <script src="{% static 'layer/layui.js' %}"></script>
+
 
 <script>
     function confirm_delete() {
         layer.open({
             title: "Confirm",
             content: "Are you sure to delete this article?",
+            btn: ['Delete', 'Cancel'],
             yes: function (index, layero) {
                 $('form#delete button').click();
                 layer.close(index);
+            },
+            success: function (layero, index) {
+                addIconforBtn();
             }
-        })
+        }
+        )
     }
 </script>
 
+<!--change color of layer btn-->
+<script>
+    function addIconforBtn() {
+        var btn1 = $(".layui-layer-btn .layui-layer-btn0");
+        btn1.css({
+            "background-color": "rgba(100,100,100, 0.6)",
+            "border-color": "rgb(0,0,0)",
+        });
+    }
+</script>
+<!--latex-->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    showProcessingMessages: false,
+    messageStyle: "none",
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [['$', '$']], 
+        displayMath: [["$$", "$$"]], 
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'],
+        ignoreClass: "comment-content" 
+    },
+    "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], 
+        showMathMenu: true 
+    }
+});
+MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+</script>
+<script src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 {% endblock content %}

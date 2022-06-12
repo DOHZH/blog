@@ -36,4 +36,8 @@
 - `article/list.html` 可以作为主页，显示文章列表等。
 - `article/detail.html` 是文章详情页面。
 - `article/edit.html` 是新建和编辑文章的页面。
+- `userprofile/login.html` 是用户的登陆界面。
+- `userprofile/register.html` 是用户的注册界面。
+- `userprofile/edit.html` 是用户编辑个人信息的界面。 
+- 此外，前端同学在工作时，为了方面管理和后续工作，请尽量将css文件和js文件分离集中存放，例如将css放到static下的style文件夹等。  
 这些页面我们已经按照 [django_blog_tutorial](https://github.com/stacklens/django_blog_tutorial) 写了个初步的框架（原文中将新建文章和编辑文章的页面分开，我们为了方便已将其合并），用的是 bootstrap 等样式，前端的同学可以按需修改。有任何问题随时联系。

@@ -9,25 +9,29 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'style/detail.css' %}">
     <link rel="stylesheet" href="{% static 'style/preview.css' %}">
+    <link rel="stylesheet" href="{% static 'style/back_to_top.css' %}">
     <link rel="stylesheet" href="{% static 'style/mainpage.css' %}">
+    <link rel="stylesheet" href="{% static 'style/footer.css' %}">
     <link rel="stylesheet" href="{% static 'animation/css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-        />
-      </head>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+    <!-- monikai.css -->
+    <link rel="stylesheet" href="{% static 'md_css/monokai.css' %}">
+    <!--mathjax-forlatex-->
+    <link rel="dns-prefetch" href="htttps://cdn.mathjax.org" />
     <script src="https://cdn.bootcss.com/jquery/3.6.0/jquery.js"></script>
     <script src="https://kit.fontawesome.com/c66de8569e.js" crossorigin="anonymous"></script>
     <style>
-        @font-face{
+        @font-face {
             font-family: banner_text;
             src: url("{% static 'animation/font/YouraScript-qZ51x-2.otf' %}");
         }
+
         a {
             color: #5E3D50;
         }
+
         a:hover {
             color: #5E3D50;
         }
@@ -36,13 +40,23 @@
 
 <body>
     {% include 'header.html' %}
-    {% block content %}{% endblock content %}
+    <div id="wrapper">
+        {% block content %}{% endblock content %}
+        <div id="push"></div>
+    </div>
     {% include 'footer.html' %}
+    {% include 'back_to_top.html' %}
 
-    
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1-lts/dist/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="{% static 'layer/layui.js' %}"></script>
+    <script src="{% static 'otherjs/back_to_top.js' %}"></script>
+    {% block script %}
+    <script>
+        $(".django-ckeditor-widget").removeAttr('style');
+    </script>
+    {% endblock script %}
+
 </body>
 
-</html>0
+</html>

@@ -29,21 +29,18 @@ Homepage
         <div class="col-auto mr-auto">
             <form class="form-inline">
                 <label class="sr-only">content</label>
-                <input type="text"
-                    class="form-control mb-2 mr-sm-2"
-                    name="search"
-                    placeholder="search..."
-                    required>
+                <input type="text" class="form-control mb-2 mr-sm-2" name="search" placeholder="search..." required>
+                <i class="fa fa-search" aria-hidden="true"></i>
             </form>
         </div>
     </div>
 
     {% if search %}
-        {% if articles %}
-        <h4><span style="color: red">"{{ search }}"</span>as following:</h4>
+    {% if articles %}
+    <h4><span style="color: red">"{{ search }}"</span>as following:</h4>
     <hr>
     {% else %}
-        <h4>none<span style="color: red">"{{ search }}"</span>related:</h4>
+    <h4>none<span style="color: red">"{{ search }}"</span>related:</h4>
     <hr>
     {% endif %}
     {% endif %}
@@ -65,9 +62,8 @@ Homepage
                     </small>
                 </span>
                 <span>{% for tag in article.tags.all %}
-                        <a href="{% url 'article:article_list' %}?tag={{ tag }}"
-                            class="badge badge-secondary">{{ tag }}
-                        </a>
+                    <a href="{% url 'article:article_list' %}?tag={{ tag }}" class="badge badge-secondary">{{ tag }}
+                    </a>
                     {% endfor %}
                 </span>
             </div>
@@ -80,15 +76,15 @@ Homepage
     <div class="pagination row">
         <div class="m-auto">
             <span class="step-links">{% if articles.has_previous %}
-                <a href="?page=1&order={{ order }}&search={{ search }}&tag={{ tag }}" class="btn btn-success">&laquo; 1
+                <a href="?page=1&order={{ order }}&search={{ search }}&tag={{ tag }}" class="btn btn-success">&laquo;
                 </a>
                 <span>...</span>
                 <a href="?page={{ articles.previous_page_number }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
                     class="btn btn-secondary">{{ articles.previous_page_number }}
                 </a>
                 {% endif %}
-                    <span class="current btn btn-danger btn-lg">{{ articles.number }}
-                    </span>
+                <span class="current btn btn-danger btn-lg">{{ articles.number }}
+                </span>
 
                 {% if articles.has_next %}
                 <a href="?page={{ articles.next_page_number }}&order={{ order }}&search={{ search }}&tag={{ tag }}"
@@ -113,6 +109,8 @@ Homepage
     </div>
     <div class="preview-text"></div>
 </div>
+
+
 
 
 <script type="text/javascript">
@@ -142,10 +140,21 @@ Homepage
             }
             _text += "</div>"
             doc.innerHTML = _text
+            let Preview = $(".my-card-body");
+            $(Preview).on("click", function () { MathJax.Hub.Queue(["Typeset", MathJax.Hub]); });
         }
     })(window)
 
+    function Adjustment() {
+        let doc = document.documentElement;
+        let relHeight = (doc.clientHeight > doc.scrollHeight) ? doc.clientHeight : doc.scrollHeight;
+        $("#mist").css('height', relHeight + 'px');
+        var top = ($(window).height() - $(".preview").height()) / 2;
+        var scrollTop = $(document).scrollTop();
+        $(".preview").css('top', top + scrollTop);
+    }
     function show_more(obj) {
+        Adjustment();
         ind = $(".my-card").index(obj);
         // console.log(ind);
         $("#mist").show();
@@ -554,6 +563,26 @@ Homepage
 </script>
 <script src="{% static 'animation/js/three.min.js' %}"></script>
 <script src="{% static 'animation/js/banner.js' %}"></script>
+<!--latex-->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    showProcessingMessages: false,
+    messageStyle: "none",
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [['$', '$']], //行内公式选择$
+        displayMath: [["$$", "$$"]], //段内公式选择$$
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a'], //避开某些标签
+        ignoreClass: "comment-content" //避开含该Class的标签
+    },
+    "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: true //关闭右击菜单显示
+    }
+});
+MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+</script>
+<script src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 {% endblock content %}
-
