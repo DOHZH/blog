@@ -30,8 +30,8 @@ class Comment(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
-    class MPTTMeta:
-        order_insertion_by = ['created']
+class MPTTMeta:
+    order_insertion_by = ['created']
 
-    def __str__(self):
-        return self.body[:20]
+def __str__(self):
+    return self.body[:20]
